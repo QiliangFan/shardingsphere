@@ -79,7 +79,6 @@ jobs:
       - name: Build and Push proxy
         uses: docker/build-push-action@v2
         with: 
-          context: ./shardingsphere-distribution/shardingsphere-jdbc-distribution
+          context: ./shardingsphere-distribution/shardingsphere-proxy-distribution
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shardingsphere-jdbc-distribution
-
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shardingsphere-proxy-distribution
