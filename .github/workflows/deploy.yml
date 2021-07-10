@@ -81,5 +81,5 @@ jobs:
         with: 
           context: ./shardingsphere-distribution/shardingsphere-jdbc-distribution
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shardingsphere-jdbc-distribution:${{  }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shardingsphere-jdbc-distribution
 
