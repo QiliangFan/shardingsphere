@@ -59,7 +59,7 @@ jobs:
         with:
           java-version: 8
       - name: set environment
-        run: export MAVEN_OPS=' -Dmaven.javadoc.skip=true -Drat.skip=true -Djacoco.skip=true'
+        run: export MAVEN_OPS=' -Dmaven.javadoc.skip=true -Drat.skip=true -Djacoco.skip=true' -DskipTests
       - name: Build Project
         run: ./mvnw -B -Prelease,docker -DskipTests clean install
 
@@ -78,4 +78,6 @@ jobs:
 
       - name: Push Docker Image
         run: |
-          docker image ls|grep apache|awk '{print $1}'|xargs -i  docker push {}
+          echo Docker Images: 
+          echo `docker image ls|grep apache|awk '{print $1":"$2}'`
+          docker image ls|grep apache|awk '{print $1":"$2}'|xargs -i docker push {}
