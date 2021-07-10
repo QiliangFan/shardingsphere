@@ -61,7 +61,7 @@ jobs:
       - name: set environment
         run: export MAVEN_OPS=' -Dmaven.javadoc.skip=true -Drat.skip=true -Djacoco.skip=true'
       - name: Build Project
-        run: ./mvnw -B clean cobertura:cobertura -D"maven.javadoc.skip"=true install
+        run: ./mvnw -B clean cobertura:cobertura -D"maven.javadoc.skip"=true install -T 16
 
       # build and pubilsh image
       - name: Set up QEMU
