@@ -47,7 +47,7 @@ jobs:
 
       # if a new reply is received, remove `status:invalid` label
       - name: Remove `status:invalid` label
-        if: ${{ always() }}
+        if: contains( github.event.issue.labels.*.name , 'status:invalid' )
         uses: actions-cool/issues-helper@v2.2.1
         with:
           actions: 'remove-labels'
@@ -58,7 +58,8 @@ jobs:
   
   check-inactive-issue:
     runs-on: ubuntu-latest
-    
+    concurrency: check-inactive   # singleton-run-stage
+
     steps:
       - name: check-inactive   # add `status:invalid` label
         uses: actions-cool/issues-helper@v2.2.1 
