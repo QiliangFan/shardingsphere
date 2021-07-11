@@ -45,36 +45,28 @@ jobs:
           owner: ${{ github.actor }}
           event_type: rerun-ci
 
-      # if a new reply is received, remove `type:inactive` label
-      - name: Remove `type:inactive` label
+      # if a new reply is received, remove `type:invalid` label
+      - name: Remove `type:invalid` label
         if: ${{ always() }}
         uses: actions-cool/issues-helper@v2.2.1
         with:
           actions: 'remove-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          labels: "type:inactive"
+          labels: "type:invalid"
 
   
   check-inactive-issue:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Create label  # create label if not exist
-        uses: actions-cool/issues-helper@v2.2.1
-        with:
-          actions: "create-label"
-          label-name: "type:inactive"
-          label-color: "778899"
-          label-desc: "the issues without replies in several days"
-
-      - name: check-inactive   # add `type:inactive` label
+      - name: check-inactive   # add `type:invalid` label
         uses: actions-cool/issues-helper@v2.2.1 
         with: 
           actions: 'check-inactive' 
           token: ${{ secrets.GITHUB_TOKEN }} 
           inactive-day: 15
-          inactive-label: "type:inactive"
+          inactive-label: "type:invalid"
           body: |
             Hello ${{ github.event.issue.user.login }}, this issue has not received a reply for serveral days.
             This issue is supposed to be closed.
@@ -91,4 +83,4 @@ jobs:
         with:
           actions: 'close-issues'
           token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'type:inactive'
+          labels: 'type:invalid'
