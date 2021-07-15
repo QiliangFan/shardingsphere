@@ -51,7 +51,7 @@ jobs:
     if: ${{ github.event_name == 'issue_comment' || ( github.event_name == 'issues' && ( github.event.action == 'edited' || github.event.action == 'reopened' ) ) }}
     steps:
     - name: Remove "status:invalid" label
-      if: ${{ contains( github.event.issue.labels.*.name , 'status':' invalid' ) }}
+      if: ${{ contains( github.event.issue.labels.*.name , 'status: invalid' ) }}
       uses: actions-cool/issues-helper@v2.2.1
       with:
         actions: 'remove-labels'
