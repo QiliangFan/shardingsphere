@@ -48,7 +48,7 @@ jobs:
 
   remove-invalid:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == "issue_comment" || ( github.event_name == "issues" && ( github.event.action == "edited" || github.event.action == "reopened" ) ) }}
+    if: ${{ github.event_name == 'issue_comment' || ( github.event_name == 'issues' && ( github.event.action == 'edited' || github.event.action == 'reopened' ) ) }}
     steps:
     - name: Remove "status:invalid" label
       if: ${{ contains( github.event.issue.labels.*.name , "status':' invalid" ) }}
@@ -82,7 +82,7 @@ jobs:
     concurrency:    # singleton-run-stage
       group: close-issue
       cancel-in-progress: true
-    if: ${{ github.event_name == 'schedule' || ( github.event_name == 'issues' && github.event.action == "labeled" ) }}
+    if: ${{ github.event_name == 'schedule' || ( github.event_name == 'issues' && github.event.action == 'labeled' ) }}
     steps:
       - name: Close Issue   # close issues with `labels`
         uses: actions-cool/issues-helper@v2.2.1
