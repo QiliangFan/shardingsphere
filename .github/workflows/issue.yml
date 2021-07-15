@@ -22,7 +22,7 @@ on:
     - cron: '0 0 */1 * *'  # once a day
 
   issue_comment:
-    types: [created]
+    types: [created,edited]
 
   issues:
     types: [labeled]
@@ -33,11 +33,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Issue Comment
+        if: ${{ github.event_name == 'issue_comment' }}
         run: |
           echo ${{ github.event.comment.body }}
 
       - name: Trigger The CI Workflow
-        if: contains( github.event.comment.body , '/run ci') 
+        if: ${{ contains( github.event.comment.body , '/run ci') && github.event_name == 'issue_comment' }} 
         uses: mvasigh/dispatch-action@main
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
@@ -45,15 +46,15 @@ jobs:
           owner: ${{ github.actor }}
           event_type: rerun-ci
 
-      # if a new reply is received, remove `status:invalid` label
-      - name: Remove `status:invalid` label
-        if: contains( github.event.issue.labels.*.name , 'status:invalid' )
+      # if a new reply is received, remove `status: invalid` label
+      - name: Remove "status:invalid" label
+        if: ${{ contains( github.event.issue.labels.*.name , "status':' invalid" ) && github.event_name == 'issue_comment' }}
         uses: actions-cool/issues-helper@v2.2.1
         with:
           actions: 'remove-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          labels: "status:invalid"
+          labels: "status: invalid"
 
   
   check-inactive-issue:
@@ -61,13 +62,14 @@ jobs:
     concurrency: check-inactive   # singleton-run-stage
 
     steps:
-      - name: check-inactive   # add `status:invalid` label
+      - name: check-inactive   # add `status: invalid` label
+        if: ${{ github.event_name == 'schedule' }}
         uses: actions-cool/issues-helper@v2.2.1 
         with: 
           actions: 'check-inactive' 
           token: ${{ secrets.GITHUB_TOKEN }} 
           inactive-day: 15
-          inactive-label: "status:invalid"
+          inactive-label: "status: invalid"
           body: |
             Hello ${{ github.event.issue.user.login }}, this issue has not received a reply for serveral days.
             This issue is supposed to be closed.
@@ -80,8 +82,9 @@ jobs:
 
     steps:
       - name: Close Issue   # close issues with `labels`
+        if: ${{ github.event_name == 'schedule' }}
         uses: actions-cool/issues-helper@v2.2.1
         with:
           actions: 'close-issues'
           token: ${{ secrets.GITHUB_TOKEN }}
-          labels: 'status:invalid'
+          labels: 'status: invalid'
