@@ -80,4 +80,4 @@ jobs:
         run: |
           echo Docker Images: 
           echo `docker image ls|grep apache|awk '{print $1":"$2}'`
-          docker image ls|grep apache|awk '{print $1":"$2}'|xargs -i docker push {}
+          docker image ls|grep apache|awk '{print $2}'|xargs -i docker push {}
